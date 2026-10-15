@@ -1,65 +1,60 @@
 ![Logo du projet](banniere.png)
 
-# fsh (Shell Personnalisé)
+# 🐚 POSIX-Unix-Shell-C (fsh) — Interpréteur de Commandes Unix en C
 
-fsh est un interpréteur de commandes Unix développé en C, offrant une prise en charge complète des fonctionnalités essentielles d'un shell, notamment :
+[![Language](https://img.shields.io/badge/Language-C99-00599C.svg?logo=c)](https://en.wikipedia.org/wiki/C99)
+[![Standard](https://img.shields.io/badge/Standard-POSIX-brightgreen.svg)]()
+[![OS](https://img.shields.io/badge/OS-Linux%20%2F%20UNIX-FCC624.svg?logo=linux&logoColor=black)](https://kernel.org/)
+[![Build](https://img.shields.io/badge/Build-Makefile-purple.svg)]()
 
-- Exécution des commandes Unix standard.
-- Redirections d'entrée/sortie : `<`, `>`, `>>`.
-- Pipes : `|`.
-- Gestion des signaux : `SIGINT`, `SIGCHLD`, etc.
-- Structures de contrôle : boucles `for` et conditionnelles `if`, `else`.
+**fsh** est un interpréteur de commandes Unix complet développé en **C**, conçu dans le strict respect des spécifications de l'API standard **POSIX** (gestion des processus, signaux et redirections de flux).
 
-## Fonctionnalités
+---
 
-- **Exécution de commandes** : fsh permet d'exécuter toutes les commandes Unix standard, en gérant les processus enfants via les appels système `fork` et `exec`.
-- **Redirections d'entrée/sortie** : Les redirections `<`, `>`, `2>` et `>>` sont implémentées en utilisant les appels système `dup2` pour manipuler les descripteurs de fichiers.
-- **Pipes** : La communication entre processus est réalisée grâce aux pipes, configurés avec les appels `pipe`, `fork`, et `dup2` pour rediriger les flux entre les commandes.
-- **Gestion des signaux** : fsh gère les signaux tels que `SIGINT` et `SIGCHLD` en utilisant l'API POSIX `signal` pour assurer une gestion appropriée des interruptions et des processus zombies.
-- **Structures de contrôle** : Le shell supporte les boucles `for` et les structures conditionnelles `if`/`else`, permettant l'exécution de scripts complexes directement dans l'interpréteur.
+## ⚡ Fonctionnalités Clés
 
-## Technologies utilisées
+- **Exécution et Contrôle de Processus** :
+  - Lancement des exécutables Unix via la combinaison `fork()` et `execvp()`.
+  - Surveillance et synchronisation des processus enfants via `waitpid()`.
+- **Pipelines et Redirections de Flux** :
+  - Pipelines multi-commandes arbitrairement longs (`cmd1 | cmd2 | cmd3`) via la primitive système `pipe()`.
+  - Redirections d'entrée/sortie standard et d'erreur (`<`, `>`, `>>`, `2>`) avec duplication de descripteurs de fichiers via `dup2()`.
+- **Gestion Robuste des Signaux POSIX** :
+  - Interception des interruptions clavier `SIGINT` (Ctrl+C) pour ne pas tuer le shell parent.
+  - Capture et traitement asynchrone de `SIGCHLD` pour éliminer systématiquement la création de processus zombies.
+- **Structures de Contrôle Avancées** :
+  - Support natif des boucles itératives `for var in list ; do ... done`.
+  - Évaluation de conditions `if [ ... ] ; then ... else ... fi`.
 
-- **Langage** : C
-- **API POSIX** :
-  - `fork`
-  - `exec`
-  - `pipe`
-  - `dup2`
-  - `signal`
-  - `wait`
+---
 
-## Installation
+## 📂 Architecture Logicielle
 
-1. Clonez le dépôt :
+- `fsh.c` : Boucle principale d'évaluation REPL (*Read-Eval-Print Loop*) et analyse syntaxique de la ligne de commande.
+- `externe.c` : Gestion des commandes externes, résolution du `PATH` et exécution sous processus enfants.
+- `for.c` : Moteur d'interprétation et d'exécution des boucles `for`.
+- `free.c` : Gestion rigoureuse de la mémoire et libération des structures allouées (zéro fuite mémoire Valgrind).
 
-   ```bash
-   git clone https://github.com/Radouane-ANI/fsh-c.git
-   ```
+---
 
-2. Accédez au répertoire du projet :
+## 🚀 Installation & Compilation
 
-   ```bash
-   cd fsh-c
-   ```
+### Prérequis
+Un compilateur C (`gcc` ou `clang`) et l'outil `make` sur environnement Linux / Unix.
 
-3. Compilez le projet :
+### Compilation
+```bash
+git clone https://github.com/Radouane-ANI/POSIX-Unix-Shell-C.git
+cd POSIX-Unix-Shell-C
+make
+```
 
-   ```bash
-   make
-   ```
-
-## Utilisation
-
-Après compilation, exécutez le shell avec la commande suivante :
-
+### Lancement
 ```bash
 ./fsh
 ```
 
-Vous pouvez ensuite utiliser fsh comme n'importe quel autre interpréteur de commandes Unix, en profitant des fonctionnalités mentionnées ci-dessus.
+---
 
-## Contribuer
-
-Les contributions sont les bienvenues. Pour proposer des améliorations ou signaler des problèmes, veuillez ouvrir une issue sur le dépôt GitHub.
-
+## 👥 Auteur
+- **Radouane Aouini** — Master Cryptologie, Calcul Haute Performance et Algorithmie (CCA) ([LinkedIn](https://www.linkedin.com/in/radouane-aouini-b14bab348))
